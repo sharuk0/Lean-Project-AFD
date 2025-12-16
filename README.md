@@ -1,4 +1,4 @@
-##📄 README: Verificación del Lema de Bombeo (Pumping Lemma) para Lenguajes Regulares en Lean 4Este proyecto en Lean 4 formaliza la definición de **Autómatas Finitos Deterministas (DFA)** y el concepto de **Lenguajes Regulares**. Culmina con la prueba formal del **Lema de Bombeo para Lenguajes Regulares**, una herramienta fundamental en la teoría de lenguajes formales.
+📄 README: Verificación del Lema de Bombeo (Pumping Lemma) para Lenguajes Regulares en Lean 4Este proyecto en Lean 4 formaliza la definición de **Autómatas Finitos Deterministas (DFA)** y el concepto de **Lenguajes Regulares**. Culmina con la prueba formal del **Lema de Bombeo para Lenguajes Regulares**, una herramienta fundamental en la teoría de lenguajes formales.
 
 El código utiliza el principio del palomar (Pigeonhole Principle) disponible en la biblioteca `Mathlib` para establecer la propiedad de "bombeo" de las cadenas en lenguajes regulares.
 
