@@ -1,11 +1,5 @@
 import Mathlib
 
--- Checks básicos (como los tuyos)
-#check Prop
-#check Type
-#check Type 1
-#check ℕ → Type
-
 namespace Project
 
 /-- DFA sobre un alfabeto Σ -/
