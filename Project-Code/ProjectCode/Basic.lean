@@ -1,8 +1,7 @@
-import Mathlib
-
+import Mathlib.Data.Fintype.Basic
 namespace Project
 
-/-- DFA sobre un alfabeto Σ -/
+/-- DFA sobre un alfabeto sigma -/
 structure MyDFA (sigma : Type u) where
   Q : Type v
   [fintype_Q : Fintype Q]
