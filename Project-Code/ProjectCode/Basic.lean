@@ -25,8 +25,7 @@ variable {sigma : Type u} (M : DFA sigma)
 -- δ* (función de transición extendida)
 def step : M.Q → List sigma → M.Q
 | q, []     => q
-| q, a :: w => step (M.δ q a) w -- CORREGIDO: Llamada recursiva sin M
-
+| q, a :: w => step (M.δ q a) w
 -- Aceptación
 def accepts (w : List sigma) : Prop :=
     step M M.q0 w ∈ M.F
@@ -35,7 +34,7 @@ def accepts (w : List sigma) : Prop :=
 def language : Set (List sigma) :=
     { w | M.accepts w }
 
-@[simp]
+@[simp] --simplicity lemma for step with list append
 theorem step_append (q : M.Q) (w₁ w₂ : List sigma) :
   step M q (w₁ ++ w₂) = step M (step M q w₁) w₂ := by
   induction w₁ generalizing q <;> simp [step, *]
@@ -81,8 +80,8 @@ theorem step_pow {sigma : Type} (M : DFA sigma) (q : M.Q) (y : List sigma) (n : 
 
 /-- Theorem: Pigeonhole principle for states -/
 theorem pigeonhole_states {sigma : Type} (M : DFA sigma) (w : List sigma)
-  (_ : w.length ≥ Fintype.card M.Q) : -- Changed 'h' to '_' to silence linter
-  ∃ j l, j < l ∧ l ≤ Fintype.card M.Q ∧
+  (_ : w.length ≥ Fintype.card M.Q) :
+  ∃ j l, j < l ∧ l ≤ Fintype.card M.Q ∧ -- Cardinalidad de elementos del set finito
     DFA.step M M.q0 (w.take j) = DFA.step M M.q0 (w.take l) := by
   let n := Fintype.card M.Q
   let f : Fin (n + 1) → M.Q := fun k => DFA.step M M.q0 (w.take k)
@@ -215,7 +214,7 @@ theorem pumping_preserves_acceptance {sigma : Type} (M : DFA sigma)
   -- 6. Now `hw` matches our goal exactly.
   exact hw
 
-/-- The Pumping Lemma (simplified version with axioms) -/
+/-- The Pumping Lemma  -/
 theorem pumping_lemma {sigma : Type} {L : Language sigma} (hL : RegularLanguage sigma L) :
   ∃ p : ℕ,
     ∀ w ∈ L, w.length ≥ p →
@@ -276,3 +275,42 @@ theorem pumping_lemma {sigma : Type} {L : Language sigma} (hL : RegularLanguage 
     exact pumping_preserves_acceptance M x y z i hcycle hw'
 
 end Project
+
+/- now we try using our lemma to prove that a^n b^m is not regular -/
+
+/-a^n b^m-/
+
+
+
+/-
+  a^n b^m | n, m ≥ 0
+inductive AB
+| a
+| b
+deriving DecidableEq
+
+open List
+
+def repeat {α : Type} (x : α) : ℕ → List α
+| 0     => []
+| n+1   => x :: repeat x n
+
+
+def aStarbStar : Language AB :=
+  { w | ∃ n m : ℕ, w = repeat AB.a n ++ repeat AB.b m }
+
+
+
+def aStarbStarDFA : DFA AB :=
+{ Q := Fin 3
+  δ := fun q s =>
+    match q, s with
+    | ⟨0, _⟩, AB.a => 0      -- seguimos leyendo a
+    | ⟨0, _⟩, AB.b => 1      -- pasamos a b
+    | ⟨1, _⟩, AB.b => 1      -- seguimos leyendo b
+    | ⟨1, _⟩, AB.a => 2      -- error
+    | ⟨2, _⟩, _    => 2      -- estado muerto
+  q0 := 0
+  F := {0, 1} }
+
+-/

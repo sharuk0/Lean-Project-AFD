@@ -3,7 +3,7 @@ import Mathlib
 namespace Project
 
 /-- DFA sobre un alfabeto σ (versión typeclass) -/
-class MyDFA (σ : Type u) where
+class DFA (σ : Type u) where
   Q : Type v
   [fintype_Q : Fintype Q]
   δ : Q → σ → Q
